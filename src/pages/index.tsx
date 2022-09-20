@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import ItemCard from '../components/ItemCard';
 
 const Home: NextPage = () => {
 	return (
@@ -10,10 +11,37 @@ const Home: NextPage = () => {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<main className='container mx-auto flex flex-col items-center justify-center min-h-screen p-4'>
-				<h1 className='text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700'>
+			<main className='container mx-auto min-h-screen p-4'>
+				<h1 className='text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700 text-center'>
 					<span className='text-purple-300'>Happi Clothing</span>
 				</h1>
+				<div className='flex gap-8 flex-wrap px-12'>
+					<ItemCard
+						title='Nike Air Forces'
+						description='hi is very nice'
+						price={100}
+					/>
+					<ItemCard
+						title='Nike Air Forces'
+						description='hi is very nice'
+						price={100}
+					/>
+					<ItemCard
+						title='Nike Air Forces'
+						description='hi is very nice'
+						price={100}
+					/>
+					<ItemCard
+						title='Nike Air Forces'
+						description='hi is very nice'
+						price={100}
+					/>
+					<ItemCard
+						title='Nike Air Forces'
+						description='hi is very nice'
+						price={100}
+					/>
+				</div>
 			</main>
 		</>
 	);
