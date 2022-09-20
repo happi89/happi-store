@@ -27,6 +27,8 @@ model Review {
 
 model Item {
     id                String  @id @default(cuid())
+    cartId            String
+    cart              Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
     title             String
     price             Int
     specs             String[]
@@ -34,6 +36,13 @@ model Item {
     images            String[]
     ram               String
     brand             String
+}
+
+model Cart {
+    id                String  @id @default(cuid())
+    userId            String  @unique
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    items             Item[]
 }
 
 // Necessary for Next auth
@@ -72,6 +81,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     reviews       Review[]
+    cart          Cart?
 }
 
 model VerificationToken {
