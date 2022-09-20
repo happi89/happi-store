@@ -16,6 +16,8 @@ datasource db {
 
 model Review {
     id                String  @id @default(cuid())
+    itemId            String
+    item              Item    @relation(fields: [itemId], references: [id], onDelete: Cascade)
     userId            String
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     title             String
@@ -28,7 +30,7 @@ model Item {
     title             String
     price             Int
     specs             String[]
-    reviews           String[]
+    reviews           Review[]
     images            String[]
     ram               String
     brand             String

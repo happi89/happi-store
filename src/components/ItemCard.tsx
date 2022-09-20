@@ -8,7 +8,7 @@ const ItemCard = ({
 	price: number;
 }) => {
 	return (
-		<div className='card w-80 bg-base-100 shadow-md'>
+		<div className='card w-[22rem] bg-base-100 shadow-md'>
 			<picture>
 				<img
 					src='https://daisyui.com/tailwind-css-component-card-1.jpg'
@@ -25,8 +25,8 @@ const ItemCard = ({
 					elit. In modi quod blanditiis consectetur deserunt sit quis cum neque
 					laudantium ipsa.
 				</p>
-				<div className='card-actions justify-end'>
-					<button className='btn btn-primary'>Buy Now</button>
+				<div className='card-actions justify-end mt-2'>
+					<button className='btn btn-primary'>Add to cart</button>
 				</div>
 			</div>
 		</div>
