@@ -1,11 +1,20 @@
 import { useRouter } from 'next/router';
+import { useCartStore } from '../pages';
 
 const ItemCard = ({
 	item,
 }: {
-	item: { title: string; id: string; price: number; images: string[] };
+	item: {
+		title: string;
+		id: string;
+		price: number;
+		images: string[];
+		brand: string;
+	};
 }) => {
 	const router = useRouter();
+	const addItem = useCartStore((state) => state.addItem);
+
 	return (
 		<div className='card w-[22rem] bg-base-100 shadow-md '>
 			<picture className='mx-auto'>
@@ -51,7 +60,9 @@ const ItemCard = ({
 					blanditiis consectetur deserunt sit quis cum neque laudantium ipsa.
 				</p>
 				<div className='card-actions justify-end mt-2'>
-					<button className='btn btn-primary'>Add to cart</button>
+					<button className='btn btn-primary' onClick={() => addItem(item)}>
+						Add to cart
+					</button>
 				</div>
 			</div>
 		</div>

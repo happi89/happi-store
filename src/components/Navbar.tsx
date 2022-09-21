@@ -2,10 +2,14 @@ import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import LoginModal from './LoginModal';
+import { useCartStore } from '../pages';
 
 const Navbar = () => {
 	const router = useRouter();
 	const { data: session } = useSession();
+
+	const cartCount = useCartStore((state) => state.getCount);
+	console.log(cartCount);
 
 	return (
 		<div className='navbar flex justify-between px-6 bg-base-100 shadow-md w-full mb-4 pt-2'>
