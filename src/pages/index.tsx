@@ -4,26 +4,40 @@ import { trpc } from '../utils/trpc';
 import create from 'zustand';
 import { Item } from '@prisma/client';
 
-interface CartState {
-	cart: Item[];
-	total: number;
-	addItem: (by: Item) => void;
-<<<<<<< HEAD
-	removeItem: (item: Item) => void;
-=======
->>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
+interface CartItem extends Item {
+	quantity: number;
 }
 
-export const useCartStore = create<CartState>()((set) => ({
+interface CartState {
+	cart: CartItem[];
+	total: number;
+	length: number;
+	addItem: (by: Item) => void;
+	removeItem: (item: CartItem) => void;
+}
+
+export const useCartStore = create<CartState>()((set, get) => ({
 	cart: [],
-<<<<<<< HEAD
 	total: 0,
-	addItem: (item: Item) =>
-		set((state) => ({
-			cart: [...state.cart, item],
-			total: state.total + item.price,
-		})),
-	removeItem: (itemToDelete: Item) => {
+	length: 0,
+	addItem: (itemToAdd: CartItem | Item) => {
+		const cart = get().cart;
+		const itemExists = cart.find((item) => itemToAdd.id === item.id);
+		if (!itemExists) {
+			set((state) => ({
+				cart: [...state.cart, { ...itemToAdd, quantity: 1 }],
+				total: state.total + itemToAdd.price,
+				length: state.length + 1,
+			}));
+		} else {
+			set((state) => ({
+				cart: [{ ...itemToAdd, quantity: (itemExists.quantity += 1) }],
+				total: state.total + itemToAdd.price,
+				length: state.length + 1,
+			}));
+		}
+	},
+	removeItem: (itemToDelete: CartItem) => {
 		const cart = get().cart;
 		const updatedCart = cart.filter((item) => item.id !== itemToDelete.id);
 		set(
@@ -32,25 +46,21 @@ export const useCartStore = create<CartState>()((set) => ({
 			}),
 			true
 		);
+		set((state) => ({
+			total: state.total - itemToDelete.price,
+			length: state.length - 1,
+		}));
 	},
-=======
-	addItem: (item: Item) => set((state) => ({ cart: [...state.cart, item] })),
->>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 }));
 
 const Home: NextPage = () => {
 	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
+
 	const cart = useCartStore((state) => state.cart);
-<<<<<<< HEAD
-	const total = useCartStore((state) => state.total);
-=======
->>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 
 	if (isLoading) return <div>Loading...</div>;
 
-	console.log(cart.length, 'cart');
-	console.log(cart, 'cart');
-
+	console.log(cart);
 	return (
 		<>
 			<main className='min-h-screen p-4'>

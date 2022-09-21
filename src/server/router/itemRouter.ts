@@ -6,7 +6,7 @@ export const itemRouter = createRouter()
 	.query('getAll', {
 		async resolve({ ctx }) {
 			try {
-				return await ctx.prisma.item.findMany();
+				return await ctx.prisma.item.findMany({});
 			} catch (err) {
 				console.log('error', err);
 				throw new TRPCError({ code: 'BAD_REQUEST' });

@@ -7,10 +7,7 @@ import { useCartStore } from '../pages';
 const Navbar = () => {
 	const router = useRouter();
 	const { data: session } = useSession();
-<<<<<<< HEAD
 
-=======
->>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 	const cart = useCartStore((state) => state.cart);
 
 	return (

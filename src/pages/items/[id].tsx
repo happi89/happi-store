@@ -1,11 +1,19 @@
 import { useRouter } from 'next/router';
+import { useCartStore } from '..';
 import { trpc } from '../../utils/trpc';
 
 const ItemPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
 
-	const { data: item } = trpc.useQuery(['item.getOne', { id: String(id) }]);
+	const { data: item, isLoading } = trpc.useQuery([
+		'item.getOne',
+		{ id: String(id) },
+	]);
+	const addItem = useCartStore((state) => state.addItem);
+
+	if (isLoading) return <div>Loading...</div>;
+	if (!item) return <div>404 Item not found</div>;
 
 	return (
 		<div>
@@ -25,7 +33,9 @@ const ItemPage = () => {
 						Price: <span className='text-red-700'>${item?.price}</span>
 					</p>
 					<div className='mt-2'>
-						<button className='btn btn-primary'>Add to cart</button>
+						<button className='btn btn-primary' onClick={() => addItem(item)}>
+							Add to cart
+						</button>
 					</div>
 				</div>
 			</div>
