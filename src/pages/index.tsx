@@ -8,11 +8,15 @@ interface CartState {
 	cart: Item[];
 	total: number;
 	addItem: (by: Item) => void;
+<<<<<<< HEAD
 	removeItem: (item: Item) => void;
+=======
+>>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 }
 
-export const useCartStore = create<CartState>()((set, get) => ({
+export const useCartStore = create<CartState>()((set) => ({
 	cart: [],
+<<<<<<< HEAD
 	total: 0,
 	addItem: (item: Item) =>
 		set((state) => ({
@@ -29,17 +33,23 @@ export const useCartStore = create<CartState>()((set, get) => ({
 			true
 		);
 	},
+=======
+	addItem: (item: Item) => set((state) => ({ cart: [...state.cart, item] })),
+>>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 }));
 
 const Home: NextPage = () => {
 	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
 	const cart = useCartStore((state) => state.cart);
+<<<<<<< HEAD
 	const total = useCartStore((state) => state.total);
+=======
+>>>>>>> 0adddb41a87b2c86e3a1ff746efaad120760bce6
 
 	if (isLoading) return <div>Loading...</div>;
 
+	console.log(cart.length, 'cart');
 	console.log(cart, 'cart');
-	console.log(total, 'total');
 
 	return (
 		<>
