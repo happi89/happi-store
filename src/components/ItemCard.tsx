@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 const ItemCard = ({
 	item,
 }: {
-	item: { title: string; id: string; price: number };
+	item: { title: string; id: string; price: number; images: string[] };
 }) => {
 	const router = useRouter();
 	return (
 		<div className='card w-[22rem] bg-base-100 shadow-md '>
-			<picture>
+			<picture className='mx-auto'>
 				<img
-					src='https://daisyui.com/tailwind-css-component-card-1.jpg'
+					src={item?.images[0]}
 					alt='image'
-					className='min-w-full cursor-pointer'
+					className='cursor-pointer max-h-72'
 					onClick={() => router.push(`/items/${item?.id}`)}
 				/>
 			</picture>

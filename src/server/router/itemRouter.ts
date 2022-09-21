@@ -7,7 +7,13 @@ export const itemRouter = createRouter()
 		async resolve({ ctx }) {
 			try {
 				return await ctx.prisma.item.findMany({
-					select: { title: true, price: true, id: true },
+					select: {
+						title: true,
+						price: true,
+						id: true,
+						images: true,
+						brand: true,
+					},
 				});
 			} catch (err) {
 				console.log('error', err);
@@ -23,7 +29,13 @@ export const itemRouter = createRouter()
 			try {
 				return await ctx.prisma.item.findUnique({
 					where: { id: input.id },
-					select: { title: true, price: true, id: true },
+					select: {
+						title: true,
+						price: true,
+						id: true,
+						images: true,
+						brand: true,
+					},
 				});
 			} catch (err) {
 				console.log('error', err);

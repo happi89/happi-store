@@ -5,6 +5,7 @@ import { trpc } from '../utils/trpc';
 const Home: NextPage = () => {
 	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
 	console.log(items);
+
 	if (isLoading) return <div>Loading...</div>;
 
 	return (
@@ -14,26 +15,6 @@ const Home: NextPage = () => {
 					{items?.map((item) => {
 						return <ItemCard key={item.id} item={item} />;
 					})}
-					{/* <ItemCard
-						title='Nike Air Forces'
-						description='hi is very nice'
-						price={100}
-					/>
-					<ItemCard
-						title='Nike Air Forces'
-						description='hi is very nice'
-						price={100}
-					/>
-					<ItemCard
-						title='Nike Air Forces'
-						description='hi is very nice'
-						price={100}
-					/>
-					<ItemCard
-						title='Nike Air Forces'
-						description='hi is very nice'
-						price={100}
-					/> */}
 				</div>
 			</main>
 		</>
