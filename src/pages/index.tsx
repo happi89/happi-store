@@ -1,12 +1,20 @@
 import type { NextPage } from 'next';
 import ItemCard from '../components/ItemCard';
+import { trpc } from '../utils/trpc';
 
 const Home: NextPage = () => {
+	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
+	console.log(items);
+	if (isLoading) return <div>Loading...</div>;
+
 	return (
 		<>
 			<main className='min-h-screen p-4'>
 				<div className='container mx-auto flex gap-8 flex-wrap px-4'>
-					<ItemCard
+					{items?.map((item) => {
+						return <ItemCard key={item.id} item={item} />;
+					})}
+					{/* <ItemCard
 						title='Nike Air Forces'
 						description='hi is very nice'
 						price={100}
@@ -25,7 +33,7 @@ const Home: NextPage = () => {
 						title='Nike Air Forces'
 						description='hi is very nice'
 						price={100}
-					/>
+					/> */}
 				</div>
 			</main>
 		</>

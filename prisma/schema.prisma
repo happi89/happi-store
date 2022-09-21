@@ -27,14 +27,14 @@ model Review {
 
 model Item {
     id                String  @id @default(cuid())
-    cartId            String
-    cart              Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+    cartId            String?
+    cart              Cart?    @relation(fields: [cartId], references: [id], onDelete: Cascade)
     title             String
     price             Int
     specs             String[]
     reviews           Review[]
     images            String[]
-    ram               String
+    ram               Int
     brand             String
 }
 
