@@ -11,15 +11,13 @@ interface CartItem extends Item {
 interface CartState {
 	cart: CartItem[];
 	total: number;
-	length: number;
-	addItem: (by: Item) => void;
+	addItem: (item: Item) => void;
 	removeItem: (item: CartItem) => void;
 }
 
 export const useCartStore = create<CartState>()((set, get) => ({
 	cart: [],
 	total: 0,
-	length: 0,
 	addItem: (itemToAdd: CartItem | Item) => {
 		const cart = get().cart;
 		const itemExists = cart.find((item) => itemToAdd.id === item.id);
@@ -27,15 +25,13 @@ export const useCartStore = create<CartState>()((set, get) => ({
 			set((state) => ({
 				cart: [...state.cart, { ...itemToAdd, quantity: 1 }],
 				total: state.total + itemToAdd.price,
-				length: state.length + 1,
 			}));
-		} else {
-			set((state) => ({
-				cart: [{ ...itemToAdd, quantity: (itemExists.quantity += 1) }],
-				total: state.total + itemToAdd.price,
-				length: state.length + 1,
-			}));
+			return;
 		}
+		set((state) => ({
+			cart: [{ ...itemToAdd, quantity: (itemExists.quantity += 1) }],
+			total: state.total + itemToAdd.price,
+		}));
 	},
 	removeItem: (itemToDelete: CartItem) => {
 		const cart = get().cart;
@@ -48,7 +44,6 @@ export const useCartStore = create<CartState>()((set, get) => ({
 		);
 		set((state) => ({
 			total: state.total - itemToDelete.price,
-			length: state.length - 1,
 		}));
 	},
 }));
