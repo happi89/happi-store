@@ -1,17 +1,8 @@
+import { Item } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { useCartStore } from '../pages';
 
-const ItemCard = ({
-	item,
-}: {
-	item: {
-		title: string;
-		id: string;
-		price: number;
-		images: string[];
-		brand: string;
-	};
-}) => {
+const ItemCard = ({ item }: { item: Item }) => {
 	const router = useRouter();
 	const addItem = useCartStore((state) => state.addItem);
 

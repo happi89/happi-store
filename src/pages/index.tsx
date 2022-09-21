@@ -7,32 +7,21 @@ import { Item } from '@prisma/client';
 interface CartState {
 	cart: Item[];
 	addItem: (by: Item) => void;
-	getCount: () => number;
-	getTotal: () => number;
 }
 
-export const useCartStore = create<CartState>()((set, get) => ({
+export const useCartStore = create<CartState>()((set) => ({
 	cart: [],
 	addItem: (item: Item) => set((state) => ({ cart: [...state.cart, item] })),
-	getCount: () => {
-		const cart = get().cart;
-		return cart.length;
-	},
-	getTotal: () => {
-		const cart = get().cart;
-		return cart.reduce((acc, item) => (item.price += acc), 0);
-	},
 }));
 
 const Home: NextPage = () => {
 	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
 	const cart = useCartStore((state) => state.cart);
-	const total = useCartStore((state) => state.getTotal);
 
 	if (isLoading) return <div>Loading...</div>;
 
+	console.log(cart.length, 'cart');
 	console.log(cart, 'cart');
-	console.log(total, 'total');
 
 	return (
 		<>
