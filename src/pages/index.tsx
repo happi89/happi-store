@@ -8,9 +8,10 @@ interface CartState {
 	cart: Item[];
 	total: number;
 	addItem: (by: Item) => void;
+	removeItem: (item: Item) => void;
 }
 
-export const useCartStore = create<CartState>()((set) => ({
+export const useCartStore = create<CartState>()((set, get) => ({
 	cart: [],
 	total: 0,
 	addItem: (item: Item) =>
@@ -18,6 +19,16 @@ export const useCartStore = create<CartState>()((set) => ({
 			cart: [...state.cart, item],
 			total: state.total + item.price,
 		})),
+	removeItem: (itemToDelete: Item) => {
+		const cart = get().cart;
+		const updatedCart = cart.filter((item) => item.id !== itemToDelete.id);
+		set(
+			() => ({
+				cart: updatedCart,
+			}),
+			true
+		);
+	},
 }));
 
 const Home: NextPage = () => {
