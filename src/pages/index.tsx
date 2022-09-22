@@ -28,12 +28,16 @@ export const useCartStore = create<CartState>()((set, get) => ({
 				cart: [...state.cart, { ...itemToAdd, quantity: 1 }],
 				total: state.total + itemToAdd.price,
 			}));
-			return;
+		} else {
+			set((state) => ({
+				cart: state.cart.map((item) =>
+					item.id === itemExists.id
+						? { ...item, quantity: item.quantity + 1 }
+						: item
+				),
+				total: state.total + itemToAdd.price,
+			}));
 		}
-		set((state) => ({
-			cart: [{ ...itemToAdd, quantity: itemExists.quantity + 1 }],
-			total: state.total + itemToAdd.price,
-		}));
 	},
 	removeItem: (itemToDelete: CartItem) => {
 		const cart = get().cart;
@@ -43,18 +47,31 @@ export const useCartStore = create<CartState>()((set, get) => ({
 			total: state.total - itemToDelete.price * itemToDelete.quantity,
 		}));
 	},
-	removeQuantity: (item: CartItem) => {
-		set((state) => ({
-			cart: [{ ...item, quantity: item.quantity - 1 }],
-			total: state.total + item.price,
-		}));
+	removeQuantity: (itemToDecrease: CartItem) => {
+		if (itemToDecrease.quantity > 1) {
+			set((state) => ({
+				cart: state.cart.map((item) =>
+					item.id === itemToDecrease.id
+						? { ...item, quantity: item.quantity - 1 }
+						: item
+				),
+				total: state.total - itemToDecrease.price,
+			}));
+		} else {
+			get().removeItem(itemToDecrease);
+		}
 	},
 }));
 
 const Home: NextPage = () => {
 	const { data: items, isLoading, isError } = trpc.useQuery(['item.getAll']);
+	const cart = useCartStore((state) => state.cart);
+	const total = useCartStore((state) => state.total);
 	if (isLoading) return <div>Loading...</div>;
-	if (!isError) return <div>Items not loaded</div>;
+	if (isError) return <div>Items not loaded</div>;
+
+	console.log(total, 'total');
+	console.log(cart, 'cart');
 
 	return (
 		<>
