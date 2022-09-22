@@ -16,22 +16,60 @@ const ItemPage = () => {
 	if (!item) return <div>404 Item not found</div>;
 
 	return (
-		<div>
-			<div className='flex gap-4 pt-2 px-6'>
-				<picture className=''>
+		<div className='container mx-auto px-4 pt-4'>
+			<div className='flex gap-16 pt-2 px-6'>
+				<picture>
 					<img
 						src={item?.images[0]}
 						alt='image'
-						className='max-h-[36rem]'
 						onClick={() => router.push(`/items/${item?.id}`)}
 					/>
 				</picture>
-				<div>
+				<div className='max-w-[60%]'>
 					<h1 className='text-2xl'>Item Page of {item?.title}</h1>
 					<p>Brand: {item?.brand}</p>
 					<p className='text-lg'>
 						Price: <span className='text-red-700'>${item?.price}</span>
 					</p>
+					<div className='rating my-1'>
+						<input
+							type='radio'
+							name='rating-1'
+							className='mask mask-star-2 bg-orange-400'
+						/>
+						<input
+							type='radio'
+							name='rating-2'
+							className='mask mask-star-2 bg-orange-400'
+						/>
+						<input
+							type='radio'
+							name='rating-3'
+							className='mask mask-star-2 bg-orange-400'
+						/>
+						<input
+							type='radio'
+							name='rating-4'
+							className='mask mask-star-2 bg-orange-400'
+						/>
+						<input
+							type='radio'
+							name='rating-5'
+							className='mask mask-star-2 bg-orange-400'
+						/>
+					</div>
+					<div className='mt-4'>
+						<p className='text-lg font-bold mb-2'>About this item.</p>
+						<ul>
+							{item.specs.map((spec) => {
+								return (
+									<li key={spec} className='list-disc'>
+										{spec}
+									</li>
+								);
+							})}
+						</ul>
+					</div>
 					<div className='mt-2'>
 						<button className='btn btn-primary' onClick={() => addItem(item)}>
 							Add to cart
@@ -41,6 +79,14 @@ const ItemPage = () => {
 			</div>
 			<div>
 				<h2 className='text-xl px-8 mt-16'>reviews</h2>
+				{item.reviews.map((review) => {
+					return (
+						<div key={review.id}>
+							<p>{review.title}</p>
+							<p>{review.content}</p>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

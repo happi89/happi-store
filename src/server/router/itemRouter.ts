@@ -31,14 +31,8 @@ export const itemRouter = createRouter()
 			try {
 				return await ctx.prisma.item.findUnique({
 					where: { id: input.id },
-					select: {
-						title: true,
-						price: true,
-						specs: true,
-						id: true,
-						ram: true,
-						images: true,
-						brand: true,
+					include: {
+						reviews: true,
 					},
 				});
 			} catch (err) {

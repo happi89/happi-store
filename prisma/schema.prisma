@@ -21,8 +21,8 @@ model Review {
     userId            String
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     title             String
-    Content           String
-    Rating            Int    
+    content           String
+    rating            Int    
 }
 
 model Item {
