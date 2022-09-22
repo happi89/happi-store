@@ -4,14 +4,15 @@ import { trpc } from '../utils/trpc';
 import create from 'zustand';
 import { Item } from '@prisma/client';
 
-interface CartItem extends Item {
+export type ItemWithoutReviews = Omit<Item, 'reviews'>;
+export interface CartItem extends ItemWithoutReviews {
 	quantity: number;
 }
 
 interface CartState {
 	cart: CartItem[];
 	total: number;
-	addItem: (item: Item) => void;
+	addItem: (item: Omit<Item, 'reviews'>) => void;
 	removeItem: (item: CartItem) => void;
 	removeQuantity: (item: CartItem) => void;
 }
@@ -19,7 +20,7 @@ interface CartState {
 export const useCartStore = create<CartState>()((set, get) => ({
 	cart: [],
 	total: 0,
-	addItem: (itemToAdd: CartItem | Item) => {
+	addItem: (itemToAdd: CartItem | ItemWithoutReviews) => {
 		const cart = get().cart;
 		const itemExists = cart.find((item) => itemToAdd.id === item.id);
 		if (!itemExists) {

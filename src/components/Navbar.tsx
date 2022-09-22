@@ -11,7 +11,7 @@ const Navbar = () => {
 	const cart = useCartStore((state) => state.cart);
 
 	return (
-		<div className='navbar flex justify-between px-6 bg-base-100 shadow-md w-full mb-4 pt-2'>
+		<div className='navbar w-full flex justify-between px-6 bg-base-100 shadow-md mb-4 pt-2'>
 			<button className='text-2xl font-bold' onClick={() => router.push('/')}>
 				Happi Store
 			</button>

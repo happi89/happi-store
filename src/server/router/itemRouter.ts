@@ -6,7 +6,17 @@ export const itemRouter = createRouter()
 	.query('getAll', {
 		async resolve({ ctx }) {
 			try {
-				return await ctx.prisma.item.findMany({});
+				return await ctx.prisma.item.findMany({
+					select: {
+						title: true,
+						price: true,
+						specs: true,
+						id: true,
+						ram: true,
+						images: true,
+						brand: true,
+					},
+				});
 			} catch (err) {
 				console.log('error', err);
 				throw new TRPCError({ code: 'BAD_REQUEST' });
@@ -21,6 +31,15 @@ export const itemRouter = createRouter()
 			try {
 				return await ctx.prisma.item.findUnique({
 					where: { id: input.id },
+					select: {
+						title: true,
+						price: true,
+						specs: true,
+						id: true,
+						ram: true,
+						images: true,
+						brand: true,
+					},
 				});
 			} catch (err) {
 				console.log('error', err);

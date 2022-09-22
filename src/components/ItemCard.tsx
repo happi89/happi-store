@@ -1,8 +1,7 @@
-import { Item } from '@prisma/client';
 import { useRouter } from 'next/router';
-import { useCartStore } from '../pages';
+import { ItemWithoutReviews, useCartStore } from '../pages';
 
-const ItemCard = ({ item }: { item: Item }) => {
+const ItemCard = ({ item }: { item: ItemWithoutReviews }) => {
 	const router = useRouter();
 	const addItem = useCartStore((state) => state.addItem);
 
