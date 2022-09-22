@@ -1,3 +1,4 @@
+import ReviewStars from './../../components/ReviewStars';
 import { useRouter } from 'next/router';
 import { useCartStore } from '..';
 import { trpc } from '../../utils/trpc';
@@ -31,33 +32,7 @@ const ItemPage = () => {
 					<p className='text-lg'>
 						Price: <span className='text-red-700'>${item?.price}</span>
 					</p>
-					<div className='rating my-1'>
-						<input
-							type='radio'
-							name='rating-1'
-							className='mask mask-star-2 bg-orange-400'
-						/>
-						<input
-							type='radio'
-							name='rating-2'
-							className='mask mask-star-2 bg-orange-400'
-						/>
-						<input
-							type='radio'
-							name='rating-3'
-							className='mask mask-star-2 bg-orange-400'
-						/>
-						<input
-							type='radio'
-							name='rating-4'
-							className='mask mask-star-2 bg-orange-400'
-						/>
-						<input
-							type='radio'
-							name='rating-5'
-							className='mask mask-star-2 bg-orange-400'
-						/>
-					</div>
+					<ReviewStars />
 					<div className='mt-4'>
 						<p className='text-lg font-bold mb-2'>About this item.</p>
 						<ul>
@@ -82,6 +57,7 @@ const ItemPage = () => {
 				{item.reviews.map((review) => {
 					return (
 						<div key={review.id}>
+							<ReviewStars />
 							<p>{review.title}</p>
 							<p>{review.content}</p>
 						</div>

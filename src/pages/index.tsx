@@ -52,8 +52,9 @@ export const useCartStore = create<CartState>()((set, get) => ({
 }));
 
 const Home: NextPage = () => {
-	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
+	const { data: items, isLoading, isError } = trpc.useQuery(['item.getAll']);
 	if (isLoading) return <div>Loading...</div>;
+	if (!isError) return <div>Items not loaded</div>;
 
 	return (
 		<>
