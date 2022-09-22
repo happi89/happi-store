@@ -13,6 +13,7 @@ interface CartState {
 	total: number;
 	addItem: (item: Item) => void;
 	removeItem: (item: CartItem) => void;
+	removeQuantity: (item: CartItem) => void;
 }
 
 export const useCartStore = create<CartState>()((set, get) => ({
@@ -29,33 +30,30 @@ export const useCartStore = create<CartState>()((set, get) => ({
 			return;
 		}
 		set((state) => ({
-			cart: [{ ...itemToAdd, quantity: (itemExists.quantity += 1) }],
+			cart: [{ ...itemToAdd, quantity: itemExists.quantity + 1 }],
 			total: state.total + itemToAdd.price,
 		}));
 	},
 	removeItem: (itemToDelete: CartItem) => {
 		const cart = get().cart;
 		const updatedCart = cart.filter((item) => item.id !== itemToDelete.id);
-		set(
-			() => ({
-				cart: updatedCart,
-			}),
-			true
-		);
 		set((state) => ({
-			total: state.total - itemToDelete.price,
+			cart: updatedCart,
+			total: state.total - itemToDelete.price * itemToDelete.quantity,
+		}));
+	},
+	removeQuantity: (item: CartItem) => {
+		set((state) => ({
+			cart: [{ ...item, quantity: item.quantity - 1 }],
+			total: state.total + item.price,
 		}));
 	},
 }));
 
 const Home: NextPage = () => {
 	const { data: items, isLoading } = trpc.useQuery(['item.getAll']);
-
-	const cart = useCartStore((state) => state.cart);
-
 	if (isLoading) return <div>Loading...</div>;
 
-	console.log(cart);
 	return (
 		<>
 			<main className='min-h-screen p-4'>

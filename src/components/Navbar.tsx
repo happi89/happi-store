@@ -24,7 +24,7 @@ const Navbar = () => {
 					</button>
 				)}
 				<div className='indicator'>
-					<span className='indicator-item badge badge-secondary'>
+					<span className='indicator-item badge badge-secondary rounded-full w-1'>
 						{cart.length}
 					</span>
 					<button className='' onClick={() => router.push('/checkout')}>
