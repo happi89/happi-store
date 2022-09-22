@@ -4,7 +4,7 @@ import { trpc } from '../utils/trpc';
 import create from 'zustand';
 import { Item } from '@prisma/client';
 
-export type ItemWithoutReviews = Omit<Item, 'reviews'>;
+export type ItemWithoutReviews = Omit<Item, 'reviews' | 'cartId'>;
 export interface CartItem extends ItemWithoutReviews {
 	quantity: number;
 }
@@ -12,7 +12,7 @@ export interface CartItem extends ItemWithoutReviews {
 interface CartState {
 	cart: CartItem[];
 	total: number;
-	addItem: (item: Omit<Item, 'reviews'>) => void;
+	addItem: (item: Omit<Item, 'reviews' | 'cartId'>) => void;
 	removeItem: (item: CartItem) => void;
 	removeQuantity: (item: CartItem) => void;
 }

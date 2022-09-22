@@ -1,5 +1,6 @@
 import CartItem from './../components/CartItem';
 import { useCartStore } from '.';
+import PaymentForm from '../components/PaymentForm';
 
 const CheckoutPage = () => {
 	const cart = useCartStore((state) => state.cart);
@@ -26,7 +27,17 @@ const CheckoutPage = () => {
 								<span>Estimated total</span>{' '}
 								<span className='text-green-700'>${total || 0}</span>
 							</p>
-							<button className='btn btn-primary w-full mt-8'>Checkout</button>
+							<label
+								htmlFor='my-modal-4'
+								className='btn btn-modal btn-primary w-full mt-8'>
+								Checkout
+							</label>
+							<input type='checkbox' id='my-modal-4' className='modal-toggle' />
+							<label htmlFor='my-modal-4' className='modal cursor-pointer'>
+								<label className='modal-box relative' htmlFor=''>
+									<PaymentForm />
+								</label>
+							</label>
 						</div>
 					</div>
 				</>
