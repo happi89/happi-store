@@ -16,10 +16,13 @@ const CheckoutPage = () => {
 					<div className='sm:flex sm:justify-between sm:gap-8 sm:flex-row flex-col'>
 						<div className='grow p-6 shadow-md'>
 							{cart.map((item) => (
-								<CartItem key={item.id} item={item} />
+								<div key={item.id}>
+									<CartItem item={item} />
+									<div className='divider'></div>
+								</div>
 							))}
 						</div>
-						<div className='p-4 shadow-md grow-0 min-w-[18rem]'>
+						<div className='p-4 shadow-md grow-0 min-w-[18rem] h-fit'>
 							<p className='mb-4'>
 								Taxes <span className='text-sm'>calculated at checkout</span>
 							</p>
