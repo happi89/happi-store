@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { createRouter } from './context';
+// import { Item } from '@prisma/client';
 
 export const itemRouter = createRouter()
 	.query('getAll', {
@@ -40,4 +41,24 @@ export const itemRouter = createRouter()
 				throw new TRPCError({ code: 'BAD_REQUEST' });
 			}
 		},
+	})
+	.middleware(async ({ ctx, next }) => {
+		if (!ctx.session) {
+			throw new TRPCError({ code: 'UNAUTHORIZED' });
+		}
+		return next();
 	});
+// .mutation('saveCart', {
+// 	input: z.object({
+// 		items: z.array(z.any()),
+// 	}),
+// 	async resolve({ ctx, input }) {
+// 		return await ctx.prisma.cart.upsert({
+// 			where: {
+// 				userId: ctx?.session?.user?.id,
+// 			},
+// 			create: { items: input?.items, userId: String(ctx?.session?.user?.id) },
+// 			update: { items: input?.items },
+// 		});
+// 	},
+// });

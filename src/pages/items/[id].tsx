@@ -2,15 +2,59 @@ import ReviewStars from './../../components/ReviewStars';
 import { useRouter } from 'next/router';
 import { useCartStore } from '..';
 import { trpc } from '../../utils/trpc';
+import { createSSGHelpers } from '@trpc/react/ssg';
+import {
+	GetStaticPaths,
+	GetStaticPropsContext,
+	InferGetStaticPropsType,
+} from 'next';
+import { appRouter } from '../../server/router';
+import superjson from 'superjson';
+import { prisma } from '../../server/db/client';
+import { Item } from '@prisma/client';
 
-const ItemPage = () => {
+export const getStaticProps = async (
+	context: GetStaticPropsContext<{ id: string }>
+) => {
+	const ssg = createSSGHelpers({
+		router: appRouter,
+		ctx: {},
+		transformer: superjson,
+	});
+	const id = context.params?.id as string;
+	await ssg.prefetchQuery('item.getOne', { id });
+
+	return {
+		props: {
+			trpcState: ssg.dehydrate(),
+			id,
+		},
+		revalidate: 1,
+	};
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const items = await prisma.item.findMany({
+		select: {
+			id: true,
+		},
+	});
+	return {
+		paths: items.map((item: Pick<Item, 'id'>) => ({
+			params: {
+				id: item.id,
+			},
+		})),
+		// https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
+		fallback: 'blocking',
+	};
+};
+
+const ItemPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 	const router = useRouter();
-	const { id } = router.query;
+	const { id } = props;
 
-	const { data: item, isLoading } = trpc.useQuery([
-		'item.getOne',
-		{ id: String(id) },
-	]);
+	const { data: item, isLoading } = trpc.useQuery(['item.getOne', { id }]);
 	const addItem = useCartStore((state) => state.addItem);
 
 	if (isLoading) return <div>Loading...</div>;
