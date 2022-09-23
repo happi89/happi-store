@@ -3,6 +3,9 @@ import ItemCard from '../components/ItemCard';
 import { trpc } from '../utils/trpc';
 import create from 'zustand';
 import { Item } from '@prisma/client';
+import { createSSGHelpers } from '@trpc/react/ssg';
+import { appRouter } from '../server/router';
+import superjson from 'superjson';
 
 export type ItemWithoutReviews = Omit<Item, 'reviews' | 'cartId'>;
 export interface CartItem extends ItemWithoutReviews {
@@ -63,15 +66,26 @@ export const useCartStore = create<CartState>()((set, get) => ({
 	},
 }));
 
+export const getStaticProps = async () => {
+	const ssg = createSSGHelpers({
+		router: appRouter,
+		ctx: {},
+		transformer: superjson,
+	});
+	await ssg.prefetchQuery('item.getAll');
+
+	return {
+		props: {
+			trpcState: ssg.dehydrate(),
+		},
+		revalidate: 1,
+	};
+};
+
 const Home: NextPage = () => {
 	const { data: items, isLoading, isError } = trpc.useQuery(['item.getAll']);
-	const cart = useCartStore((state) => state.cart);
-	const total = useCartStore((state) => state.total);
 	if (isLoading) return <div>Loading...</div>;
 	if (isError) return <div>Items not loaded</div>;
-
-	console.log(total, 'total');
-	console.log(cart, 'cart');
 
 	return (
 		<>
