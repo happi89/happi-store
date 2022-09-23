@@ -2,66 +2,22 @@ import ReviewStars from './../../components/ReviewStars';
 import { useRouter } from 'next/router';
 import { useCartStore } from '..';
 import { trpc } from '../../utils/trpc';
-import { createSSGHelpers } from '@trpc/react/ssg';
-import {
-	GetStaticPaths,
-	GetStaticPropsContext,
-	InferGetStaticPropsType,
-} from 'next';
-import { appRouter } from '../../server/router';
-import superjson from 'superjson';
-import { prisma } from '../../server/db/client';
-import { Item } from '@prisma/client';
 
-export const getStaticProps = async (
-	context: GetStaticPropsContext<{ id: string }>
-) => {
-	const ssg = createSSGHelpers({
-		router: appRouter,
-		ctx: {},
-		transformer: superjson,
-	});
-	const id = context.params?.id as string;
-	await ssg.prefetchQuery('item.getOne', { id });
-
-	return {
-		props: {
-			trpcState: ssg.dehydrate(),
-			id,
-		},
-		revalidate: 1,
-	};
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-	const items = await prisma.item.findMany({
-		select: {
-			id: true,
-		},
-	});
-	return {
-		paths: items.map((item: Pick<Item, 'id'>) => ({
-			params: {
-				id: item.id,
-			},
-		})),
-		// https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
-		fallback: 'blocking',
-	};
-};
-
-const ItemPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ItemPage = () => {
 	const router = useRouter();
-	const { id } = props;
+	const { id } = router.query;
 
-	const { data: item, isLoading } = trpc.useQuery(['item.getOne', { id }]);
+	const { data: item, isLoading } = trpc.useQuery([
+		'item.getOne',
+		{ id: String(id) },
+	]);
 	const addItem = useCartStore((state) => state.addItem);
 
 	if (isLoading) return <div>Loading...</div>;
 	if (!item) return <div>404 Item not found</div>;
 
 	return (
-		<div className='container mx-auto pt-4 sm:px-8 px-4'>
+		<div className='container mx-auto pt-4 sm:px-8 px-4 min-h-screen'>
 			<div className='flex md:gap-16 gap-8 pt-2 justify-center'>
 				<picture>
 					<img
@@ -104,7 +60,7 @@ const ItemPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 						<div key={review.id}>
 							<ReviewStars />
 							<p>{review.title}</p>
-							{/* <p>{review.content}</p> */}
+							<p>{review.content}</p>
 						</div>
 					);
 				})}
