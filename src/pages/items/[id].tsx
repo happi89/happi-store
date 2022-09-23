@@ -61,7 +61,7 @@ const ItemPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 	if (!item) return <div>404 Item not found</div>;
 
 	return (
-		<div className='container mx-auto pt-4 sm:px-8 px-4 min-h-screen'>
+		<div className='container mx-auto pt-4 sm:px-8 px-4'>
 			<div className='flex md:gap-16 gap-8 pt-2 justify-center'>
 				<picture>
 					<img
@@ -104,7 +104,7 @@ const ItemPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 						<div key={review.id}>
 							<ReviewStars />
 							<p>{review.title}</p>
-							<p>{review.content}</p>
+							{/* <p>{review.content}</p> */}
 						</div>
 					);
 				})}

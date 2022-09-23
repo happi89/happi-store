@@ -7,7 +7,7 @@ const CheckoutPage = () => {
 	const total = useCartStore((state) => state.total);
 
 	return (
-		<div className='md:container md:mx-auto md:px-8 min-h-screen'>
+		<div className='md:container md:mx-auto md:px-8'>
 			{cart.length > 0 ? (
 				<>
 					<h1 className='text-2xl font-bold mt-2 mb-8'>
@@ -15,14 +15,10 @@ const CheckoutPage = () => {
 					</h1>
 					<div className='sm:flex sm:justify-between sm:gap-8 sm:flex-row flex-col'>
 						<div className='grow p-6 shadow-md'>
-							{cart.map((item, i) => (
+							{cart.map((item) => (
 								<div key={item.id}>
 									<CartItem item={item} />
-									{cart.length > 1 && cart[i] !== cart[cart.length - 1] ? (
-										<div className='divider'></div>
-									) : (
-										''
-									)}
+									<div className='divider'></div>
 								</div>
 							))}
 						</div>
