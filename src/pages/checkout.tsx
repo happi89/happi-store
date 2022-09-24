@@ -15,10 +15,14 @@ const CheckoutPage = () => {
 					</h1>
 					<div className='sm:flex sm:justify-between sm:gap-8 sm:flex-row flex-col'>
 						<div className='grow p-6 shadow-md'>
-							{cart.map((item) => (
+							{cart.map((item, i) => (
 								<div key={item.id}>
 									<CartItem item={item} />
-									<div className='divider'></div>
+									{cart.length > 1 && cart[i] !== cart[cart.length - 1] ? (
+										<div className='divider'></div>
+									) : (
+										''
+									)}
 								</div>
 							))}
 						</div>
